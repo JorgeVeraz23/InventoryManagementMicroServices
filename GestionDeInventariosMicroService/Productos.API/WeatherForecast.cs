@@ -1,4 +1,4 @@
-namespace InventoryManagement
+namespace Productos.API
 {
     public class WeatherForecast
     {
