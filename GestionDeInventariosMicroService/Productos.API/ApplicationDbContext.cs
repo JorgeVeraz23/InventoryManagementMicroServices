@@ -11,7 +11,7 @@ namespace Productos.API
 
         }
 
-        public DbSet<Products> Products { get; set; }
+        public DbSet<Product> Productss { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<StoredFile> StoredFiles { get; set; }
 

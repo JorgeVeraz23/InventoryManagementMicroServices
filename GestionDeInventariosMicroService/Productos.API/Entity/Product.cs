@@ -17,8 +17,10 @@ namespace Productos.API.Entity
         [Required]
         [ForeignKey("Category")]
         public int IdCategoria { get; set; }
-        public virtual Category? Category { get; set; } 
-        public virtual ICollection<StoredFile>? ListStockFiles { get; set; }
+        public virtual Category Category { get; set; } = default!;
+        [ForeignKey("StoredFiles")]
+        public Guid ImageFileId { get; set; }
+        public virtual StoredFile StoredFiles { get; set; } = default!;
 
     }
 }

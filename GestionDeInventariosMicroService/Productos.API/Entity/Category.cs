@@ -9,6 +9,7 @@ namespace Productos.API.Entity
         [Required]
         public string Name { get; set; } = "";
         public string? Description { get; set; }
-        public virtual ICollection<Products>? ProductList {  get; set; }
+        public virtual ICollection<Product> ProductList { get; set; } = new List<Product>();
+
     }
 }

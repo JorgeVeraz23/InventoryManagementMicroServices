@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace Shared.Models.UtilitiesShared
 {
-    internal class ApiResponse
+    public class ApiResponse
     {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+
+        public ApiResponse(bool success, string message)
+        {
+            Success = success;
+            Message = message;
+        }
+
     }
 }

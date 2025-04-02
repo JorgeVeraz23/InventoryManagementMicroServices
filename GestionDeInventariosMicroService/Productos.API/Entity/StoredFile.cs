@@ -12,8 +12,8 @@ namespace Productos.API.Entity
         public long SizeInBytes { get; set; }
         public string? Description { get; set; }
         [ForeignKey("Product")]
-        public int IdProduct {  get; set; }
-        public virtual Product? Product { get; set; }
+        public int? IdProduct {  get; set; }
+        public virtual Product Product { get; set; } = default!;
 
     }
 }
