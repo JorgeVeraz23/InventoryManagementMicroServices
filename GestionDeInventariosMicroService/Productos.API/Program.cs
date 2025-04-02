@@ -2,9 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Productos.API;
 using Productos.API.Dto;
 using Productos.API.Entity;
+using Productos.API.Interface;
 using Productos.API.Repository;
 using Productos.API.Services;
 using Shared.Models.Repositories;
+using Shared.Models.Repositories.Interfaces;
 using Shared.Models.Services;
 using Shared.Models.Services.Interfaces;
 
@@ -16,7 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 //Registrar un servicio de aplicación
-builder.Services.AddScoped<BaseCrudRepository<Product, int>, ProductRepository>();
+builder.Services.AddScoped<IStoredFileService, StoredFileService>();
+builder.Services.AddScoped<ICrudRepository<Product, int>, ProductRepository>();
 builder.Services.AddScoped<ICrudService<ProductDto, ProductResponseDto, int>, ProductService>();
 
 
@@ -39,6 +42,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllers();
 

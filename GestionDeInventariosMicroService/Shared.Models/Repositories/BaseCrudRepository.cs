@@ -22,12 +22,15 @@ namespace Shared.Models.Repositories
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id")!.Equals(id));
+
         }
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
