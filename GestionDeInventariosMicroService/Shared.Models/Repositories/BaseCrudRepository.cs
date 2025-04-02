@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models.Repositories.Interfaces;
+using Shared.Models.UtilitiesShared;
 
 namespace Shared.Models.Repositories
 {
@@ -22,28 +23,42 @@ namespace Shared.Models.Repositories
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
+            if (typeof(BaseEntity<TKey>).IsAssignableFrom(typeof(TEntity)))
+            {
+                return await _dbSet
+                    .AsNoTracking()
+                    .Where(e => EF.Property<bool>(e, "IsActive") == true)
+                    .ToListAsync();
+            }
+
             return await _dbSet.AsNoTracking().ToListAsync();
         }
 
+
         public virtual async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            return await _dbSet
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id")!.Equals(id));
+            if (typeof(BaseEntity<TKey>).IsAssignableFrom(typeof(TEntity)))
+            {
+                return await _dbSet
+                    .Where(e => EF.Property<TKey>(e, "Id")!.Equals(id)
+                             && EF.Property<bool>(e, "IsActive") == true)
+                    .FirstOrDefaultAsync();
+            }
 
+            return await _dbSet.FindAsync(id); 
         }
+
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await SaveChangesAsync(); 
             return entity;
         }
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            await SaveChangesAsync(); 
             return entity;
         }
 
@@ -52,10 +67,16 @@ namespace Shared.Models.Repositories
             var entity = await GetByIdAsync(id);
             if (entity == null) return false;
 
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            if (entity is BaseEntity<TKey> baseEntity)
+            {
+                baseEntity.IsActive = false;
+                baseEntity.DeletedAt = DateTime.UtcNow;
+            }
+
+            await SaveChangesAsync();
             return true;
         }
+
 
         public virtual async Task SaveChangesAsync()
         {

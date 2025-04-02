@@ -62,6 +62,9 @@ namespace Productos.API.Services
                 return new ApiResponse(false, "Producto no encontrado");
 
             _mapper.Map(dto, existing);
+
+            // 🔥 Evitar sobrescritura por tracking
+            existing.Category = null;
             await _repository.UpdateAsync(existing);
 
             return new ApiResponse(true, "Producto actualizado");

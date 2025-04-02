@@ -22,6 +22,7 @@ namespace Productos.API.Repository
             return await _context.Productss.AsNoTracking()
                 .Include(p => p.Category)
                 .Include(p => p.StoredFiles)
+                .Where(x => x.IsActive == true)
                 .ToListAsync();
         }
 
@@ -29,9 +30,9 @@ namespace Productos.API.Repository
         public override async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Productss
-                .AsNoTracking()
                 .Include(p => p.Category)
                 .Include(p => p.StoredFiles)
+                .Where (x => x.IsActive == true)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
