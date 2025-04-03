@@ -3,6 +3,8 @@
 using AutoMapper;
 using Productos.API.Dto;
 using Productos.API.Entity;
+using Productos.API.Interface;
+using Shared.Models.Dto;
 using Shared.Models.Repositories;
 using Shared.Models.Repositories.Interfaces;
 using Shared.Models.Services.Interfaces;
@@ -10,15 +12,27 @@ using Shared.Models.UtilitiesShared;
 
 namespace Productos.API.Services
 {
-    public class ProductService : ICrudService<ProductDto, ProductResponseDto, int>
+    public class ProductService : IProductService
     {
-        private readonly ICrudRepository<Product, int> _repository;
+        private readonly IProductRepository _repository;
         private readonly IMapper _mapper;
 
-        public ProductService(ICrudRepository<Product, int> repository, IMapper mapper)
+        public ProductService(IProductRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<ApiResponse> ActualizarStockAsync(int id, int cantidad)
+        {
+            var product = await _repository.GetByIdAsync(id);
+            if (product == null)
+                return new ApiResponse(false, "Producto no encontrado");
+
+            product.Stock = cantidad; 
+            await _repository.UpdateAsync(product);
+
+            return new ApiResponse(true, "Stock actualizado");
         }
 
         public async Task<ApiResponse> CreateAsync(ProductDto dto)
@@ -55,6 +69,12 @@ namespace Productos.API.Services
             return product == null ? null : _mapper.Map<ProductResponseDto>(product);
         }
 
+        public async Task<IEnumerable<ProductResponseDto>> GetFilteredAsync(ProductFilterParams filters)
+        {
+            var products = await _repository.GetFilteredAsync(filters);
+            return _mapper.Map<IEnumerable<ProductResponseDto>>(products);
+        }
+
         public async Task<ApiResponse> UpdateAsync(ProductDto dto)
         {
             var existing = await _repository.GetByIdAsync(dto.Id);
@@ -63,8 +83,8 @@ namespace Productos.API.Services
 
             _mapper.Map(dto, existing);
 
-            // 🔥 Evitar sobrescritura por tracking
-            existing.Category = null;
+            
+            
             await _repository.UpdateAsync(existing);
 
             return new ApiResponse(true, "Producto actualizado");

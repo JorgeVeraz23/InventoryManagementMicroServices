@@ -5,7 +5,6 @@ namespace Transacciones.API.Entity
 {
     public class Transaction : BaseEntity<long>
     {
-        public DateTime Date { get; set; }
 
         public TransactionType Type { get; set; }
 

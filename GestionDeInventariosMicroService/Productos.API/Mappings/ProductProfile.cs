@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Productos.API.Dto;
 using Productos.API.Entity;
+using Shared.Models.Dto;
 
 namespace Productos.API.Mappings
 {
@@ -10,7 +11,7 @@ namespace Productos.API.Mappings
         {
             CreateMap<ProductDto, Product>().ReverseMap();
 
-            // DTOs internos
+
             CreateMap<ProductCreateDto, ProductDto>()
                 .ForMember(dest => dest.ImageFileId, opt => opt.Ignore());
 

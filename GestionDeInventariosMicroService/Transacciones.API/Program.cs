@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Transacciones.API;
+using Transacciones.API.HttpClients;
 using Transacciones.API.Interface.ITransactionRepository;
+using Transacciones.API.Interface.ITransactionService;
 using Transacciones.API.Repository;
+using Transacciones.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +16,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(connectionString));
 
-//Registrar un servicio de aplicacion
+
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+
+builder.Services.AddHttpClient<IProductHttpClient, ProductHttpClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7029"); 
+});
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

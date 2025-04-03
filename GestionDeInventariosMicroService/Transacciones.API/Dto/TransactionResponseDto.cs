@@ -2,12 +2,14 @@
 {
     public class TransactionResponseDto
     {
-        public int ProductId { get; set; }
-        public string Type { get; set; }
-        public decimal UnitPrice { get; set; }
-        public int Quantity { get; set; }
-        public decimal Total { get; set; }
-
-        public decimal Iva => Total * 0.12m;
+        public int Id { get; set; }
+        public DateTime Fecha { get; set; }
+        public string TipoTransaccion { get; set; } = "";
+        public int ProductoId { get; set; }
+        public int Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
+        public decimal PrecioTotal { get; set; }
+        public string? Detalle { get; set; }
     }
+
 }

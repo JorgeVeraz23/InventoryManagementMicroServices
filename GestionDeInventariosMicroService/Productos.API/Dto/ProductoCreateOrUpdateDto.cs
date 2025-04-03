@@ -14,7 +14,10 @@
         public int Stock { get; set; }
         public int IdCategoria { get; set; }
 
-        public IFormFile? Image { get; set; } // <- archivo
+        public IFormFile? Image { get; set; } 
     }
+
+
+
 
 }

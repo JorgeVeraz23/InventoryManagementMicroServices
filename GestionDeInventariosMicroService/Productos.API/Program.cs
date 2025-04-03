@@ -17,10 +17,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(connectionString));
 
-//Registrar un servicio de aplicación
+
 builder.Services.AddScoped<IStoredFileService, StoredFileService>();
-builder.Services.AddScoped<ICrudRepository<Product, int>, ProductRepository>();
-builder.Services.AddScoped<ICrudService<ProductDto, ProductResponseDto, int>, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 
 

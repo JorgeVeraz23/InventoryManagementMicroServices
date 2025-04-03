@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Productos.API.Dto;
 using Productos.API.Interface;
 using Productos.API.Services;
+using Shared.Models.Dto;
 using Shared.Models.Services.Interfaces;
 using Shared.Models.UtilitiesShared;
 
@@ -14,21 +15,21 @@ namespace Productos.API.Controllers
     public class ProductsController : ControllerBase
     {
 
-        private readonly ICrudService<ProductDto, ProductResponseDto, int> _service;
+        private readonly IProductService _service;
         private readonly IStoredFileService _fileService;
         private IMapper _mapper;
 
         public ProductsController(
-            ICrudService<ProductDto, ProductResponseDto, int> productService,
+            IProductService service,
             IStoredFileService fileService,
             IMapper mapper)
         {
-            _service = productService;
+            _service = service;
             _fileService = fileService;
             _mapper = mapper;
         }
 
-        // GET: api/products
+       
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetAll([FromQuery] string? filter = null)
         {
@@ -36,7 +37,16 @@ namespace Productos.API.Controllers
             return Ok(result);
         }
 
-        // GET: api/products/5
+
+        [HttpGet("GetFilteredAsync")]
+        public async Task<IActionResult> GetFilteredAsync([FromQuery] ProductFilterParams filters)
+        {
+            var result = await _service.GetFilteredAsync(filters);
+            return Ok(result); 
+        }
+
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductResponseDto>> GetById(int id)
         {
@@ -47,7 +57,7 @@ namespace Productos.API.Controllers
             return Ok(result);
         }
 
-        // POST: api/products
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateDto request)
@@ -67,7 +77,7 @@ namespace Productos.API.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        // PUT: api/products
+
         [HttpPut]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update([FromForm] ProductUpdateDto request)
@@ -87,7 +97,17 @@ namespace Productos.API.Controllers
             return response.Success ? Ok(response) : NotFound(response);
         }
 
-        // DELETE: api/products/5
+
+        [HttpPatch("ActualizarStock")]
+        public async Task<IActionResult> UpdateStock([FromBody] UpdateStockDto dto)
+        {
+            var result = await _service.ActualizarStockAsync(dto.Id, dto.Cantidad);
+            return result.Success ? Ok(result) : NotFound(result);
+        }
+
+
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse>> Delete(int id)
         {
