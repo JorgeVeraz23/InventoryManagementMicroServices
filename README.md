@@ -16,7 +16,7 @@ Antes de ejecutar el proyecto en un entorno local, es necesario contar con los s
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/InventoryManagementMicroServices.git
+git clone https://github.com/JorgeVeraz23/InventoryManagementMicroServices.git
 ```
 
 ### 2. Abrir la solución
