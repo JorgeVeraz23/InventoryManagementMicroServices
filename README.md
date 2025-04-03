@@ -1,3 +1,4 @@
+
 # Inventory Management Microservices
 
 Este proyecto implementa una arquitectura basada en microservicios para la gestión de inventario. Está compuesto por dos APIs principales: una para la administración de productos y otra para el registro de transacciones (compras y ventas).
@@ -16,7 +17,7 @@ Antes de ejecutar el proyecto en un entorno local, es necesario contar con los s
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/JorgeVeraz23/InventoryManagementMicroServices.git
+git clone https://github.com/tuusuario/InventoryManagementMicroServices.git
 ```
 
 ### 2. Abrir la solución
@@ -36,16 +37,13 @@ Ambos deben tener la acción "Inicio".
 
 Verificar las cadenas de conexión en los archivos `appsettings.json` de ambos proyectos. Ajustarlas según sea necesario para que apunten a la instancia local de SQL Server.
 
-### 5. Aplicar migraciones y crear la base de datos
+### 5. Crear bases de datos con scripts incluidos
 
-Usar la Consola del Administrador de Paquetes para ejecutar:
+En la raíz del proyecto se encuentra un archivo ZIP llamado `ScriptsBDTransactionAPI` que contiene los scripts necesarios para crear las bases de datos `ProductsDataBase` y `TransactionsDataBase`.
 
-```bash
-Update-Database -Context ApplicationDbContext
-Update-Database -Context TransactionDbContext
-```
+> **Importante:** No es necesario ejecutar `Update-Database`. Los scripts SQL ya contienen los comandos `CREATE DATABASE`, `CREATE TABLE` y también `INSERT` para precargar datos de ejemplo.
 
-Esto generá las tablas necesarias en ambas bases de datos.
+Solo es necesario ejecutar los scripts SQL manualmente desde SQL Server Management Studio u otra herramienta compatible.
 
 ### 6. Ejecutar el proyecto
 
@@ -58,4 +56,4 @@ Desde Swagger se pueden probar todos los endpoints disponibles de forma interact
 
 ---
 
-Este README cubre los pasos necesarios para ejecutar localmente el backend del sistema de gestión de inventario. Para cualquier problema durante la ejecución, revisar la configuración de las cadenas de conexión o las migraciones pendientes.
+Este README cubre los pasos necesarios para ejecutar localmente el backend del sistema de gestión de inventario. Para cualquier problema durante la ejecución, revisar la configuración de las cadenas de conexión o las bases de datos creadas correctamente.
